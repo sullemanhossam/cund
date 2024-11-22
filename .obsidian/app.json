@@ -1,0 +1,13 @@
+{
+  "showUnsupportedFiles": true,
+  "userIgnoreFilters": [
+    ".*node_modules[\\\\/].* ``",
+    "(^|[/\\\\])node_modules([/\\\\].*)",
+    "(^|.*[\\\\/])node_modules[\\\\/].*",
+    "(^|.*[\\\\/])node_modules[\\\\/]",
+    "^(?!.*\\bnode_modules\\b).*",
+    "node_modules/",
+    "node_modules/*"
+  ],
+  "newFileLocation": "current"
+}
