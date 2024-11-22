@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "demo.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "demo"
+              "title": "README"
             }
           }
         ]
@@ -164,6 +164,7 @@
   },
   "active": "6b737a721f6f05fc",
   "lastOpenFiles": [
+    "demo.md",
     "TrialBridge/1732275326621-hossam-index.transit.bkp",
     "TrialBridge/1732275301751-hossam-index.transit.bkp",
     "TrialBridge/index.transit",
@@ -176,7 +177,6 @@
     "pages/contents.md",
     "pages",
     "journals",
-    "logseq/custom.css",
     "bin/client/client/src/stories/assets/accessibility.svg",
     "bin/client/client/src/assets/rocket.svg",
     "bin/client/client/src/assets/close.svg",

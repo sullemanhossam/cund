@@ -13,7 +13,8 @@ export class Mirror {
     this.outline =  generateOutline(file["contents"])
   }
 
-  writeToDisk(path = `./${this.file.metaData["name"]}.md`) {
+  writeToDisk(path:string) {
+    path = `${path}/${this.file.metaData["name"]}.md`
     writeToFile(path, this.codeBlock);
     // writeToFile(path, this.outline);
   }
