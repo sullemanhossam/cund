@@ -1,9 +1,10 @@
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync, statSync } from 'fs';
+import path from 'path';
+import { mkdirSync } from "fs";
+import { dirname } from "path";
 
 export async function doesFileExist(path) {
-  const notreal = Bun.file(path);
-  return await notreal.exists(); // false
-  // return fs.existsSync(path);
+  return existsSync(path);
 }
 
 export async function copyFile(input, output) {
@@ -11,30 +12,67 @@ export async function copyFile(input, output) {
 }
 
 export function writeToFile(path, content) {
-  const file = Bun.file(path);
-  const writer = file.writer();
+  console.log("🚀 ~ writeToFile ~ content:", content)
+  console.log("🚀 ~ writeToFile ~ path:", path)
+ // Ensure the directory exists
+ const dir = dirname(path);
+ try {
+   mkdirSync(dir, { recursive: true }); // Create directories if they don't exist
+ } catch (error) {
+   console.error("🚀 ~ writeToFile ~ mkdirSync error:", error);
+   throw new Error(`Failed to create directory: ${dir}`);
+ }
+
+ // Write to file
+ const file = Bun.file(path);
+ const writer = file.writer();
   writer.write(content);
-  // writer.write("it was the worst of times\n");
+  
 }
 
 export function getFileContents(path) {
-    try {
+  const stats = statSync(path); // Get information about the path
+    if (stats.isFile()) {
+      try {
         const text = readFileSync(path, 'utf-8'); // Read the file's contents as a string
         return text;
     } catch (error) {
         console.error(`Error reading file at ${path}:`, error);
-        throw error; // Re-throw the error for the caller to handle
+        // throw error; // Re-throw the error for the caller to handle
+    }
     }
 }
 
-export function inspectFile(filename) {
-  const path = require("path");
-  // const filename = 'hello.html';
-  return {
-    name: path.parse(filename).name, //=> "hello"
-    extenstion: path.parse(filename).ext, //=> ".html"
-    base: path.parse(filename).base, //=> "hello.html"
-  };
+
+export function inspectFile(filePath) {
+  try {
+    if (!filePath) {
+      throw new Error('File path is required');
+    }
+
+    // Normalize the path to ensure consistency
+    const normalizedPath = path.resolve(filePath);
+
+    // Check if the file exists
+    if (!existsSync(normalizedPath)) {
+      throw new Error(`File does not exist: ${normalizedPath}`);
+    }
+
+    // Parse the path
+    const parsed = path.parse(normalizedPath);
+
+    return {
+      name: parsed.name,         // File name without extension
+      extension: parsed.ext,     // File extension, including the dot
+      base: parsed.base,         // Full file name with extension
+      dir: parsed.dir,           // Directory path of the file
+      isAbsolute: path.isAbsolute(filePath), // Check if the original path is absolute
+    };
+  } catch (error) {
+    console.error(`Error inspecting file ${filePath}:`, error.message);
+    // Re-throw if you want the caller to handle the error
+    throw error;
+  }
 }
 
 export function deduceFileLanguage(extenstion) {

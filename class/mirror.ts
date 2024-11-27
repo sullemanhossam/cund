@@ -1,21 +1,32 @@
 import { codeBlock } from "../services/blocks";
 import { writeToFile } from "../services/files";
 import { generateOutline } from "../services/outlines";
+import type { File } from "./file";
 
 export class Mirror {
-  file: any; // Size of the file in bytes
-  codeBlock: string;
-  outline: any;
+  destination: any;
+  file: any;
+  // file: any; // Instance of the File class
+  // codeBlock: string | undefined; // Code block representation of file content
+  // outline: string | undefined; // Outline of file content
 
-  constructor(file: any) {
+  constructor(destination: any, file: any) {
+    //  have this execute whenever a mirror is made
     this.file = file;
-    this.codeBlock = codeBlock(file["contents"], file["language"]);
-    this.outline =  generateOutline(file["contents"])
+    this.destination = (destination + "/" + this.file.path).replace(/\.[^/.]+$/, ".md");
   }
 
-  writeToDisk(path:string) {
-    path = `${path}/${this.file.metaData["name"]}.md`
-    writeToFile(path, this.codeBlock);
-    // writeToFile(path, this.outline);
+  initMirror() {
+    // console.log("🚀 ~ Mirror ~ initMirror ~ file:", this.file)
+    // console.log("🚀 ~ Mirror ~ initMirror ~ destination:", this.destination)
+    let contentToWrite = "";
+    if (!this.file.contents) {
+      console.log("Empty File Skipping...")
+      return
+    }
+    contentToWrite += `# Code Block\n\n${codeBlock(this.file)}\n`;
+    writeToFile(this.destination, contentToWrite);
+
   }
+
 }

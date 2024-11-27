@@ -1,29 +1,33 @@
-import {
-  getFileContents,
-  inspectFile,
-} from "../services/files";
+import { getFileContents, inspectFile } from "../services/files";
 var detect = require("language-detect");
 
-type language = {
-  framework: any;
-  lang: any;
-};
+// type Language = {
+//   framework: string | null;
+//   lang: string | null;
+// };
 
-type metaData = {
+type MetaData = {
   name: string;
-  extenstion: string;
+  extension: string;
   base: string;
+  language: string | undefined
 };
 
 export class File {
-  mirror: string | undefined; // mirrored version of the file
-  language: language | undefined; // Programming or spoken language of the file's content
-  metaData: metaData | undefined; // File extension (e.g., .txt, .js, .png)
-  contents: any;
+    path : string
+//   mirror: string | undefined; // mirrored version of the file
+//   language: Language | undefined; // Programming or spoken language of the file's content
+  metaData: MetaData | undefined; // File metadata
+  contents: string | undefined; // Assuming file contents are text-based
 
-  constructor(path: string) {
-    this.contents = getFileContents(path);
-    this.metaData = inspectFile(path);
-    this.language = detect.contents(path, this.contents); //=> "JavaScript"
-  }
+    constructor(path: string) {
+        this.path = path
+            this.contents = getFileContents(path);
+            this.metaData = inspectFile(path);
+            // this.language = {
+        //       framework: null,
+            //   lang: this.contents ? detect(this.contents) : null, // Using detect function correctly
+            // };
+        //   }
+    }
 }

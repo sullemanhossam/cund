@@ -1,14 +1,17 @@
-function getCodeBlockExt(language) {
-    switch (language) {
-        case "JavaScript":
-            return "js"
-        default:
-            break;
-    }
+
+export function codeBlock(file) {
+    const {metaData, contents} = file
+    // console.log(language)
+    return `\`\`\`${metaData.extension.replace(/\.(?=[^.]+$)/, "")}\n${contents}\n\`\`\``
 }
 
-export function codeBlock(contents, language) {
-    // console.log(language)
-    return `\`\`\`${getCodeBlockExt(language)}\n${contents}\n\`\`\``
-}
+// function getCodeBlockExt(language) {
+//     switch (language) {
+//         case "JavaScript":
+//             return "js"
+//         default:
+//             break;
+//     }
+// }
+
 
