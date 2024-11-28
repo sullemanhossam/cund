@@ -1,12 +1,19 @@
 import { File } from "./class/file";
 import { Mirror } from "./class/mirror";
 import { readdir } from "node:fs/promises";
+
 const { readFile } = require("fs/promises");
 const ignore = require("ignore");
 
+
+import 'dotenv/config';
+
 const defaultIgnore = [];
-const readPath = "./";
-const writePath = "/Users/hossam/Git/cund-obsidian";
+const readPath = process.env.READPATH;
+const writePath = process.env.WRITEPATH;
+
+console.log("Read Path:", readPath);
+console.log("Write Path:", writePath);
 
 (async () => {
   try {
@@ -39,9 +46,10 @@ function createVirtualFiles(files) {
   files.forEach((file) => {
     // console.log("🚀 ~ files.forEach ~ file:", file)
     try {
-      const myFile = new File(file);
+      const myFile = new File(readPath + "/" + file);
       virtualFiles = [...virtualFiles, myFile]
     } catch (error) {
+      throw error
         // console.log("🚀 ~ files.forEach ~ error:", error)
     }
   });
@@ -81,7 +89,6 @@ async function filterFiles(files) {
   ]);
 
   // Get all files and filter using .gitignore
-  // const files = await readdir(readPath, { recursive: true });
   const filteredFiles = files.filter((file) => !ig.ignores(file));
   // console.log("🚀 ~ filterFiles ~ filteredFiles:", filteredFiles)
 

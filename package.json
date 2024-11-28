@@ -8,6 +8,7 @@
     "start": "bun index.js"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
     "esprima": "^4.0.1",
     "ignore": "^6.0.2",
     "language-detect": "*"

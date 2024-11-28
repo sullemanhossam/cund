@@ -1,7 +1,5 @@
-import { existsSync, readFileSync, statSync } from 'fs';
-import path from 'path';
-import { mkdirSync } from "fs";
-import { dirname } from "path";
+import { existsSync, readFileSync, statSync, mkdirSync } from 'fs';
+import { dirname, isAbsolute, parse, resolve} from "path";
 
 export async function doesFileExist(path) {
   return existsSync(path);
@@ -30,60 +28,60 @@ export function writeToFile(path, content) {
   
 }
 
+
 export function getFileContents(path) {
-  const stats = statSync(path); // Get information about the path
+  console.log("🚀 ~ getFileContents ~ path:", path);
+
+  if (!doesFileExist(path)) {
+    console.error(`Path does not exist: ${path}`);
+    return 
+  }
+
+  try {
+    const stats = statSync(path); // Get information about the path
+
     if (stats.isFile()) {
-      try {
-        const text = readFileSync(path, 'utf-8'); // Read the file's contents as a string
-        return text;
-    } catch (error) {
-        console.error(`Error reading file at ${path}:`, error);
-        // throw error; // Re-throw the error for the caller to handle
+      // Read the file's contents as a string
+      return readFileSync(path, 'utf-8');
+    } else {
+      console.error(`Path is not a file: ${path}`);
+      return
     }
-    }
+  } catch (error) {
+    console.error(`Error accessing path ${path}:`, error);
+    return // Return null if an error occurs
+  }
 }
 
 
-export function inspectFile(filePath) {
+export function inspectFile(path) {
   try {
-    if (!filePath) {
+    if (!path) {
       throw new Error('File path is required');
     }
 
-    // Normalize the path to ensure consistency
-    const normalizedPath = path.resolve(filePath);
-
+    if (isAbsolute(path)) {
+      path = resolve(path);
+    }
+ 
     // Check if the file exists
-    if (!existsSync(normalizedPath)) {
-      throw new Error(`File does not exist: ${normalizedPath}`);
+    if (!existsSync(path)) {
+      console.log(`File does not exist: ${path}`);
     }
 
     // Parse the path
-    const parsed = path.parse(normalizedPath);
+    const parsed = parse(path);
 
     return {
       name: parsed.name,         // File name without extension
       extension: parsed.ext,     // File extension, including the dot
       base: parsed.base,         // Full file name with extension
       dir: parsed.dir,           // Directory path of the file
-      isAbsolute: path.isAbsolute(filePath), // Check if the original path is absolute
+      isAbsolute: isAbsolute(path), // Check if the original path is absolute
     };
   } catch (error) {
-    console.error(`Error inspecting file ${filePath}:`, error.message);
+    console.error(`Error inspecting file ${path}:`, error.message);
     // Re-throw if you want the caller to handle the error
     throw error;
-  }
-}
-
-export function deduceFileLanguage(extenstion) {
-  switch (extenstion) {
-    case "js":
-      return { framework: "none", lang: "javascript" };
-      case "tsx":
-      return { framework: "react", lang: "typescript" };
-    case "jsx":
-      return { framework: "react", lang: "javascript" };
-    default:
-      break;
   }
 }

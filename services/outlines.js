@@ -1,8 +1,6 @@
 const esprima = require("esprima");
 
 export function generateOutline(content) {
-    // Read the file content
-    // const fileContent = fs.readFileSync(filePath, 'utf-8');
 
     // Parse the content into an AST
     const ast = esprima.parseModule(content, { loc: true });
@@ -15,6 +13,7 @@ export function generateOutline(content) {
 
     // Traverse the AST
     ast.body.forEach((node) => {
+        console.log("🚀 ~ ast.body.forEach ~ node:", node)
         switch (node.type) {
             case 'ImportDeclaration':
                 outline.imports.push({

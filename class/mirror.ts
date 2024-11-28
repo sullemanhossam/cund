@@ -1,17 +1,13 @@
 import { codeBlock } from "../services/blocks";
 import { writeToFile } from "../services/files";
-import { generateOutline } from "../services/outlines";
-import type { File } from "./file";
+// import { generateOutline } from "../services/outlines";
+// import type { File } from "./file";
 
 export class Mirror {
   destination: any;
   file: any;
-  // file: any; // Instance of the File class
-  // codeBlock: string | undefined; // Code block representation of file content
-  // outline: string | undefined; // Outline of file content
 
   constructor(destination: any, file: any) {
-    //  have this execute whenever a mirror is made
     this.file = file;
     this.destination = (destination + "/" + this.file.path).replace(/\.[^/.]+$/, ".md");
   }
